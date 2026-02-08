@@ -6,8 +6,6 @@ export const {
   VITE_BASE_URL: BASE_URL,
   VITE_API_BASE_URL: API_BASE_URL,
   VITE_AUTH_BASE_URL: AUTH_BASE_URL,
-  VITE_SELF_HOSTED,
-  SELF_HOSTED,
   // auth (server-side secrets)
   AUTH_CLIENT_ID,
   AUTH_CLIENT_SECRET,
@@ -21,10 +19,3 @@ export const API_GRAPHQL_URL = `${API_BASE_URL}/graphql`;
 
 // environment helpers
 export const isDevEnv = import.meta.env.DEV;
-export const isSelfHosted =
-  SELF_HOSTED === "true" || VITE_SELF_HOSTED === "true";
-
-// billing provider
-export const billingProvider: "local" | "aether" = isSelfHosted
-  ? "local"
-  : "aether";
