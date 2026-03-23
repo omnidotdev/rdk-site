@@ -1,21 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
   ArrowRight,
+  Check,
   Code,
   Copy,
-  Check,
   Globe,
   Heart,
   Layers,
   Zap,
 } from "lucide-react";
-import { useState } from "react";
+import { Suspense, lazy, useState } from "react";
 import { LuGithub as GithubIcon } from "react-icons/lu";
 
-import { Button } from "@/components/ui/button";
 import { ExternalLink } from "@/components/core";
+import { Button } from "@/components/ui/button";
 import app from "@/lib/config/app.config";
 import createMetaTags from "@/lib/util/createMetaTags";
+
+const HeroScene = lazy(() => import("@/components/landing/HeroScene"));
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -145,7 +147,10 @@ function HomePage() {
           </div>
         </div>
 
-        <div className="pointer-events-none absolute top-1/2 left-1/2 -z-10 size-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/5 blur-[100px]" />
+        {/* 3D background scene (client-only) */}
+        <Suspense fallback={null}>
+          <HeroScene />
+        </Suspense>
       </section>
 
       {/* Features */}
@@ -161,24 +166,26 @@ function HomePage() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-2">
-            {features.map(({ icon: Icon, title, description, accent, accentBg }) => (
-              <div
-                key={title}
-                className="group rounded-2xl border bg-card p-6 transition-all duration-300 hover:border-primary/30"
-              >
+            {features.map(
+              ({ icon: Icon, title, description, accent, accentBg }) => (
                 <div
-                  className={`mb-4 flex size-12 items-center justify-center rounded-xl ${accentBg} ${accent}`}
+                  key={title}
+                  className="group rounded-2xl border bg-card p-6 transition-all duration-300 hover:border-primary/30"
                 >
-                  <Icon className="size-6" />
+                  <div
+                    className={`mb-4 flex size-12 items-center justify-center rounded-xl ${accentBg} ${accent}`}
+                  >
+                    <Icon className="size-6" />
+                  </div>
+                  <h3 className="mb-2 font-semibold text-foreground text-lg">
+                    {title}
+                  </h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    {description}
+                  </p>
                 </div>
-                <h3 className="mb-2 font-semibold text-foreground text-lg">
-                  {title}
-                </h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  {description}
-                </p>
-              </div>
-            ))}
+              ),
+            )}
           </div>
         </div>
       </section>
