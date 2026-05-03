@@ -1,10 +1,12 @@
-import { cva, type VariantProps } from "class-variance-authority";
-import type { HTMLAttributes } from "react";
+import { cva } from "class-variance-authority";
 
 import cn from "@/lib/utils";
 
+import type { VariantProps } from "class-variance-authority";
+import type { HTMLAttributes } from "react";
+
 const alertVariants = cva(
-  "relative w-full rounded-lg border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7",
+  "relative w-full rounded-lg border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:top-4 [&>svg]:left-4 [&>svg]:text-foreground [&>svg~*]:pl-7",
   {
     variants: {
       variant: {
@@ -47,10 +49,7 @@ const AlertDescription = ({
   className,
   ...props
 }: HTMLAttributes<HTMLParagraphElement>) => (
-  <div
-    className={cn("text-sm [&_p]:leading-relaxed", className)}
-    {...props}
-  />
+  <div className={cn("text-sm [&_p]:leading-relaxed", className)} {...props} />
 );
 AlertDescription.displayName = "AlertDescription";
 

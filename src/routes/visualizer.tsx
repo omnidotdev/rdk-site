@@ -1,6 +1,6 @@
 import { Tabs } from "@ark-ui/react/tabs";
-import { createFileRoute, Link } from "@tanstack/react-router";
 import Editor from "@monaco-editor/react";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import {
   AlertCircleIcon,
   BarChartIcon,
@@ -23,8 +23,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useGardenStore } from "@/lib/garden";
-import cn from "@/lib/utils";
 import createMetaTags from "@/lib/util/createMetaTags";
+import cn from "@/lib/utils";
 
 import type { GardenSchema } from "@omnidotdev/garden";
 
@@ -194,7 +194,7 @@ function GardenTabs({
         <Tabs.Trigger
           value="visualize"
           className={cn(
-            "flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+            "flex items-center justify-center gap-2 rounded-md px-3 py-2 font-medium text-sm transition-colors",
             activeTab === "visualize"
               ? "bg-background text-foreground shadow-sm"
               : "text-muted-foreground hover:text-foreground",
@@ -207,7 +207,7 @@ function GardenTabs({
         <Tabs.Trigger
           value="edit"
           className={cn(
-            "flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+            "flex items-center justify-center gap-2 rounded-md px-3 py-2 font-medium text-sm transition-colors",
             activeTab === "edit"
               ? "bg-background text-foreground shadow-sm"
               : "text-muted-foreground hover:text-foreground",
@@ -220,7 +220,11 @@ function GardenTabs({
 
       <Tabs.Content value="visualize" className="mt-6 flex-1">
         <div className="flex h-full w-full items-center justify-center">
-          {isClient ? <GardenVisualizer schema={activeSchema} /> : "Loading visualizer..."}
+          {isClient ? (
+            <GardenVisualizer schema={activeSchema} />
+          ) : (
+            "Loading visualizer..."
+          )}
         </div>
       </Tabs.Content>
 
@@ -233,7 +237,9 @@ function GardenTabs({
 
 function GardenVisualizer({ schema }: { schema: GardenSchema }) {
   // Dynamically import Garden component
-  const [Garden, setGarden] = useState<React.ComponentType<{ schema: GardenSchema }> | null>(null);
+  const [Garden, setGarden] = useState<React.ComponentType<{
+    schema: GardenSchema;
+  }> | null>(null);
 
   useEffect(() => {
     import("@omnidotdev/garden").then((mod) => {
@@ -293,7 +299,7 @@ function SchemaEditor({
       <CardContent className="flex flex-col gap-4">
         {/* Font size controls */}
         <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-foreground">Font Size:</span>
+          <span className="text-muted-foreground text-sm">Font Size:</span>
           <Button
             variant="outline"
             size="icon"
