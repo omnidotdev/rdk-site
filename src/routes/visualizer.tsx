@@ -23,7 +23,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useGardenStore } from "@/lib/garden";
-import { cn } from "@/lib/util/cn";
+import cn from "@/lib/utils";
 import createMetaTags from "@/lib/util/createMetaTags";
 
 import type { GardenSchema } from "@omnidotdev/garden";

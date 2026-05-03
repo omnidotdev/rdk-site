@@ -32,7 +32,7 @@ const AccordionItem = ({ className, ...rest }: AccordionItemProps) => (
 );
 
 interface ItemTriggerProps extends AccordionItemTriggerProps {
-  icon?: ElementType;
+  icon?: ElementType<{ className?: string }>;
 }
 
 const AccordionItemTrigger = ({

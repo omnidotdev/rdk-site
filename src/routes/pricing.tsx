@@ -5,12 +5,16 @@ import { FrequentlyAskedQuestions, PriceCard } from "@/components/pricing";
 import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getPrices } from "@/server/functions/prices";
 
-import type { Price } from "@/components/pricing";
+import type { Price } from "@/lib/providers/billing";
 
 const FREE_PRICE: Price = {
   id: "free-price",
+  active: true,
+  currency: "usd",
   unit_amount: 0,
+  recurring: null,
   product: {
+    id: "free-product",
     name: "Free",
     description: "Start for free.",
     marketing_features: [
@@ -30,7 +34,7 @@ const PricingPage = () => {
   const tabs = useTabs({ defaultValue: "month" });
 
   const filteredPrices = prices.filter(
-    (price) => price.recurring?.interval === tabs.value,
+    (price: Price) => price.recurring?.interval === tabs.value,
   );
 
   return (
@@ -58,7 +62,7 @@ const PricingPage = () => {
             {/** Handling the free tier could be quite different across apps. For now, we disable the action for authenticated users. TODO: Implement downstream. */}
             <PriceCard price={FREE_PRICE} disableAction />
 
-            {filteredPrices.map((price) => (
+            {filteredPrices.map((price: Price) => (
               <PriceCard key={price.id} price={price} />
             ))}
           </TabsContent>
