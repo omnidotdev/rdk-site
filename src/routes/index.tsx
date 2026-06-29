@@ -1,3 +1,4 @@
+import { Button } from "@omnidotdev/thornberry/button";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -13,7 +14,6 @@ import { Suspense, lazy, useState } from "react";
 import { LuGithub as GithubIcon } from "react-icons/lu";
 
 import { ExternalLink } from "@/components/core";
-import { Button } from "@/components/ui/button";
 import app from "@/lib/config/app.config";
 import createMetaTags from "@/lib/util/createMetaTags";
 

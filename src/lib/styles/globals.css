@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@source "../../../node_modules/@omnidotdev/thornberry/build";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
@@ -110,7 +111,7 @@
   --primary-800: oklch(0.45 0.085 200.68);
   --primary-900: oklch(0.398 0.07 201.99);
   --primary-950: oklch(0.302 0.056 204.36);
-  --primary-1000: oklch(0.22 0.04 205.0);
+  --primary-1000: oklch(0.22 0.04 205);
 
   /* blue secondary */
   --secondary-50: oklch(0.97 0.014 254.6);
@@ -124,7 +125,7 @@
   --secondary-800: oklch(0.424 0.199 265.64);
   --secondary-900: oklch(0.379 0.146 265.52);
   --secondary-950: oklch(0.282 0.091 267.94);
-  --secondary-1000: oklch(0.21 0.065 270.0);
+  --secondary-1000: oklch(0.21 0.065 270);
 
   --background: var(--color-white);
   --foreground: var(--base-800);

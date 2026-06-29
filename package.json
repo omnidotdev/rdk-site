@@ -65,6 +65,7 @@
     "vite-plugin-mkcert": "^1.17.9"
   },
   "dependencies": {
+    "@omnidotdev/thornberry": "github:omnidotdev/thornberry#381e262",
     "@ark-ui/react": "^5.30.0",
     "@icons-pack/react-simple-icons": "^13.8.0",
     "@monaco-editor/react": "^4.7.0",

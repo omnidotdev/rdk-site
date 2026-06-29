@@ -1,8 +1,8 @@
 import { Format } from "@ark-ui/react";
+import { Button } from "@omnidotdev/thornberry/button";
 import { CheckIcon } from "lucide-react";
 
 import { ExternalLink } from "@/components/core";
-import { Button } from "@/components/ui/button";
 import {
   CardContent,
   CardDescription,
@@ -13,8 +13,8 @@ import {
 import { capitalizeFirstLetter } from "@/lib/util";
 import cn from "@/lib/utils";
 
-import type { Price } from "@/lib/providers/billing";
 import type { CardProps } from "@/components/ui/card";
+import type { Price } from "@/lib/providers/billing";
 
 interface Props extends CardProps {
   price: Price;

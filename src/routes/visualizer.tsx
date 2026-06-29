@@ -1,5 +1,6 @@
 import { Tabs } from "@ark-ui/react/tabs";
 import Editor from "@monaco-editor/react";
+import { Button } from "@omnidotdev/thornberry/button";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import {
   AlertCircleIcon,
@@ -14,7 +15,6 @@ import {
 import { useEffect, useState } from "react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
