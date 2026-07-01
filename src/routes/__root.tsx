@@ -107,6 +107,22 @@ export const Route = createRootRouteWithContext<{
         sizes: "180x180",
         href: "/apple-touch-icon.png",
       },
+      {
+        rel: "canonical",
+        href: app.url,
+      },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: app.name,
+          url: app.url,
+          description: app.description,
+        }),
+      },
     ],
   }),
   loader: () => getThemeServerFn(),
