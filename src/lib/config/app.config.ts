@@ -3,6 +3,8 @@
  */
 const app = {
   name: "Reality Development Kit",
+  // Catalog symbol, mirrors the omni-api product catalog SSOT
+  icon: "⊗",
   description:
     "Unified API for web-based XR experiences. Build once with React and Three.js, deploy everywhere.",
   url: "https://rdk.omni.dev",
@@ -20,6 +22,7 @@ const app = {
   },
   organization: {
     name: "Omni",
+    url: "https://omni.dev",
     supportEmailAddress: "support@omni.dev",
   },
   /** PWA configuration. Values should match public/manifest.json. */
