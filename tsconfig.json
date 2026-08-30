@@ -1,23 +1,18 @@
 {
   "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["src-nextjs-backup", "src/**/*.test.ts", "src/**/*.test.tsx", "src/test", "e2e"],
+  "exclude": [
+    "src-nextjs-backup",
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/test",
+    "e2e"
+  ],
   "compilerOptions": {
     "target": "es2022",
     "jsx": "react-jsx",
     "module": "esnext",
-    "lib": [
-      "es2022",
-      "dom",
-      "dom.iterable",
-      // add global `WebWorker` and `ServiceWorker` types
-      "webworker"
-    ],
-    "types": [
-      "vite/client",
-      // enable Serwist to properly type `virtual:serwist`
-      "@serwist/vite/typings",
-      "node"
-    ],
+    "lib": ["es2022", "dom", "dom.iterable"],
+    "types": ["vite/client", "node"],
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": false,
