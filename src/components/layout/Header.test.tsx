@@ -36,6 +36,22 @@ mock.module("@/components/core/InternalLink", () => ({
   ),
 }));
 
+// Mock ExternalLink to render a plain anchor
+mock.module("@/components/core/ExternalLink", () => ({
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode;
+    href: string;
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
+  ),
+}));
+
 // Import after mocking
 const { default: Header } = await import("./Header");
 
@@ -53,10 +69,10 @@ describe("Header", () => {
     expect(header).toBeDefined();
   });
 
-  test("renders pricing link", () => {
+  test("renders docs link", () => {
     renderHeader();
 
-    const pricingLink = screen.getByRole("link", { name: "Pricing" });
-    expect(pricingLink).toBeDefined();
+    const docsLink = screen.getByRole("link", { name: "Docs" });
+    expect(docsLink).toBeDefined();
   });
 });

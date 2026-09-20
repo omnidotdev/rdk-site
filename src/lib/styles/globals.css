@@ -86,6 +86,7 @@
 }
 
 :root {
+  color-scheme: light;
   /* slate base */
   --base-50: oklch(0.984 0.003 247.86);
   --base-100: oklch(0.968 0.007 247.9);
@@ -167,6 +168,7 @@
 }
 
 .dark {
+  color-scheme: dark;
   --background: var(--base-950);
   --foreground: var(--base-200);
   --card: var(--base-950);

@@ -8,7 +8,8 @@ const app = {
   description:
     "Unified API for web-based XR experiences. Build once with React and Three.js, deploy everywhere.",
   url: "https://rdk.omni.dev",
-  docsUrl: "https://docs.omni.dev",
+  docsUrl: "https://docs.omni.dev/products/rdk",
+  tutorialUrl: "https://docs.omni.dev/products/rdk/tutorial",
   repoUrl: "https://github.com/omnidotdev/rdk",
   socials: {
     discord: "https://discord.gg/omnidotdev",

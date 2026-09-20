@@ -2,13 +2,12 @@ import { Button } from "@omnidotdev/thornberry/button";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   ArrowRight,
+  Camera,
   Check,
-  Code,
   Copy,
-  Globe,
-  Heart,
-  Layers,
-  Zap,
+  Glasses,
+  MapPin,
+  QrCode,
 } from "lucide-react";
 import { Suspense, lazy, useState } from "react";
 import { LuGithub as GithubIcon } from "react-icons/lu";
@@ -29,43 +28,77 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
-const installCommand =
-  "bun add @omnidotdev/rdk @react-three/fiber @react-three/drei three";
+const installCommand = "bun add @omnidotdev/rdk @react-three/fiber react three";
 
-const features = [
+const codeSample = `import { XR } from "@omnidotdev/rdk/engine";
+import {
+  GeolocationAnchor,
+  GeolocationSession,
+} from "@omnidotdev/rdk/geolocation";
+import { Canvas } from "@react-three/fiber";
+
+export default function App() {
+  return (
+    <Canvas>
+      <XR>
+        <GeolocationSession>
+          <GeolocationAnchor latitude={51.05} longitude={-0.72}>
+            <mesh>
+              <boxGeometry args={[10, 10, 10]} />
+              <meshBasicMaterial color="cyan" />
+            </mesh>
+          </GeolocationAnchor>
+        </GeolocationSession>
+      </XR>
+    </Canvas>
+  );
+}`;
+
+const modes = [
   {
-    icon: Layers,
-    title: "Unified XR API",
-    description:
-      "One consistent API surface for AR, VR, and mixed reality. Write once, target any XR platform.",
-    accent: "text-primary",
-    accentBg: "bg-primary/10",
+    n: "01",
+    icon: QrCode,
+    title: "Marker AR",
+    backend: "AR.js",
+    desc: "Anchor 3D content to printed fiducial markers. Reliable, and works with no WebXR.",
   },
   {
-    icon: Code,
-    title: "React + Three.js Powered",
-    description:
-      "Build immersive 3D experiences with familiar React patterns and the power of Three.js under the hood.",
-    accent: "text-secondary",
-    accentBg: "bg-secondary/10",
+    n: "02",
+    icon: MapPin,
+    title: "Geolocation AR",
+    backend: "LocAR.js",
+    desc: "Place world anchors by GPS and compass heading, at outdoor map scale.",
   },
   {
-    icon: Globe,
-    title: "Cross-Platform",
-    description:
-      "Deploy to web, mobile AR, and VR headsets from a single codebase. No platform-specific rewrites.",
-    accent: "text-emerald-500",
-    accentBg: "bg-emerald-500/10",
+    n: "03",
+    icon: Camera,
+    title: "Magic Window",
+    backend: "DeviceOrientation",
+    desc: "Camera passthrough driven by device orientation. Works on any phone.",
   },
   {
-    icon: Zap,
-    title: "Future-Proof",
-    description:
-      "Built on WebXR, WebGPU, and open standards. Stay ahead as the spatial web evolves.",
-    accent: "text-purple-500",
-    accentBg: "bg-purple-500/10",
+    n: "04",
+    icon: Glasses,
+    title: "WebXR AR / VR",
+    backend: "@react-three/xr",
+    desc: "Immersive headset and handset sessions through the WebXR spec.",
   },
 ];
+
+const ecosystem = [
+  "Three.js",
+  "react-three-fiber",
+  "AR.js",
+  "LocAR",
+  "WebXR",
+  "MediaPipe",
+  "ONNX Runtime",
+  "WebGPU",
+];
+
+const gridBackground =
+  "linear-gradient(to right, color-mix(in oklch, var(--color-primary) 14%, transparent) 1px, transparent 1px)," +
+  "linear-gradient(to bottom, color-mix(in oklch, var(--color-primary) 14%, transparent) 1px, transparent 1px)";
 
 /**
  * Home page / Landing.
@@ -81,31 +114,70 @@ function HomePage() {
 
   return (
     <div className="relative">
+      {/* marquee animation */}
+      <style>
+        {
+          "@keyframes rdk-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}"
+        }
+      </style>
+
+      {/* AR-style coordinate grid, faded toward the edges */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 -z-20"
+        style={{
+          backgroundImage: gridBackground,
+          backgroundSize: "46px 46px",
+          maskImage:
+            "radial-gradient(ellipse 90% 70% at 50% 0%, black 30%, transparent 85%)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse 90% 70% at 50% 0%, black 30%, transparent 85%)",
+        }}
+      />
+
       {/* Hero */}
-      <section className="relative px-4 pt-20 pb-32 sm:px-6 md:pt-32 md:pb-40 lg:px-8">
-        <div className="mx-auto max-w-4xl text-center">
-          <div className="mb-6 flex justify-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 font-medium text-primary text-sm">
-              An Omni Reality product
-            </span>
-          </div>
+      <section className="relative overflow-hidden">
+        <Suspense fallback={null}>
+          <HeroScene />
+        </Suspense>
+        {/* legibility wash */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 60% 50% at 38% 46%, color-mix(in oklch, var(--color-background) 60%, transparent) 0%, transparent 72%)",
+          }}
+        />
 
-          <h1 className="mb-6 font-extrabold text-4xl tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-            <span className="block text-foreground">{app.name}</span>
-            <span className="mt-2 block bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Build XR for the Web
-            </span>
-          </h1>
+        <div className="relative z-10 mx-auto max-w-6xl px-6 pt-28 pb-24 md:pt-40 md:pb-32 lg:px-8">
+          <div className="max-w-3xl">
+            <p className="mb-6 font-mono text-primary text-sm tracking-wide">
+              <span className="mr-1">{app.icon}</span>
+              REALITY DEVELOPMENT KIT
+              <span className="text-muted-foreground"> / web-native XR</span>
+            </p>
 
-          <p className="mx-auto mb-10 max-w-2xl text-lg text-muted-foreground">
-            {app.description}
-          </p>
+            <h1 className="font-display font-extrabold text-5xl leading-[0.98] tracking-tight sm:text-6xl md:text-7xl">
+              The React framework
+              <br />
+              <span className="bg-gradient-to-r from-primary to-[#8b5cf6] bg-clip-text pb-2 text-transparent leading-[1.05]">
+                for web XR.
+              </span>
+            </h1>
 
-          {/* Install command */}
-          <div className="mx-auto mb-8 max-w-xl">
-            <div className="flex items-center gap-2 rounded-lg border bg-card px-4 py-3 font-mono text-sm">
-              <span className="text-muted-foreground">$</span>
-              <code className="flex-1 truncate text-left text-foreground">
+            <p className="mt-7 max-w-xl text-lg text-muted-foreground">
+              One React API over marker AR, geolocation AR, camera passthrough,
+              and WebXR, powered by{" "}
+              <span className="text-foreground">Three.js</span> and{" "}
+              <span className="text-foreground">react-three-fiber</span>. Target
+              browsers, phones, and headsets from a single codebase.
+            </p>
+
+            {/* Install */}
+            <div className="mt-9 flex max-w-md items-center gap-2 rounded-lg border bg-card/70 px-4 py-3 font-mono text-sm backdrop-blur">
+              <span className="text-primary">$</span>
+              <code className="flex-1 truncate text-foreground">
                 {installCommand}
               </code>
               <Button
@@ -121,101 +193,24 @@ function HomePage() {
                 )}
               </Button>
             </div>
-          </div>
 
-          {/* CTAs */}
-          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <ExternalLink
-              href={app.repoUrl}
-              size="lg"
-              className="group h-12 gap-2 px-8 font-semibold text-base"
-            >
-              <GithubIcon size={18} />
-              View on GitHub
-              <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-            </ExternalLink>
-
-            <ExternalLink
-              href="https://github.com/sponsors/omnidotdev"
-              variant="outline"
-              size="lg"
-              className="h-12 gap-2 px-8"
-            >
-              <Heart className="size-4 text-pink-500" />
-              Sponsor
-            </ExternalLink>
-          </div>
-        </div>
-
-        {/* 3D background scene (client-only) */}
-        <Suspense fallback={null}>
-          <HeroScene />
-        </Suspense>
-      </section>
-
-      {/* Features */}
-      <section className="relative px-4 py-24 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="mx-auto mb-16 max-w-2xl text-center">
-            <h2 className="mb-4 font-bold text-3xl text-foreground sm:text-4xl">
-              Why RDK?
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              The fastest path from idea to immersive experience
-            </p>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-2">
-            {features.map(
-              ({ icon: Icon, title, description, accent, accentBg }) => (
-                <div
-                  key={title}
-                  className="group rounded-2xl border bg-card p-6 transition-all duration-300 hover:border-primary/30"
-                >
-                  <div
-                    className={`mb-4 flex size-12 items-center justify-center rounded-xl ${accentBg} ${accent}`}
-                  >
-                    <Icon className="size-6" />
-                  </div>
-                  <h3 className="mb-2 font-semibold text-foreground text-lg">
-                    {title}
-                  </h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    {description}
-                  </p>
-                </div>
-              ),
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* Open Source CTA */}
-      <section className="relative px-4 py-24 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="relative overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/5 to-background p-8 sm:p-12 lg:p-16">
-            <div className="absolute top-0 right-0 size-64 rounded-full bg-primary/10 blur-3xl" />
-            <div className="absolute bottom-0 left-0 size-64 rounded-full bg-secondary/5 blur-3xl" />
-
-            <div className="relative flex flex-col items-center gap-8 lg:flex-row lg:justify-between">
-              <div className="max-w-xl text-center lg:text-left">
-                <h2 className="mb-4 font-bold text-3xl text-foreground sm:text-4xl">
-                  Open source, MIT licensed
-                </h2>
-                <p className="text-lg text-muted-foreground">
-                  RDK is free and open source. Inspect the code, contribute
-                  features, or build your own XR toolkit on top. Your
-                  experiences, your rules.
-                </p>
-              </div>
-
+            {/* CTAs */}
+            <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+              <ExternalLink
+                href={app.tutorialUrl}
+                size="lg"
+                className="group h-12 gap-2 px-8 font-semibold text-base"
+              >
+                Start the tutorial
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+              </ExternalLink>
               <ExternalLink
                 href={app.repoUrl}
                 variant="outline"
                 size="lg"
-                className="h-12 gap-2 px-6"
+                className="h-12 gap-2 px-8"
               >
-                <GithubIcon size={20} />
+                <GithubIcon size={18} />
                 View on GitHub
               </ExternalLink>
             </div>
@@ -223,32 +218,150 @@ function HomePage() {
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="relative px-4 py-32 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-4xl text-center">
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-            <div className="size-[400px] rounded-full bg-primary/10 blur-[100px]" />
+      {/* Ecosystem marquee */}
+      <section className="overflow-hidden border-y bg-card/40 py-4 backdrop-blur">
+        <div
+          className="flex w-max items-center gap-12 whitespace-nowrap font-mono text-muted-foreground text-sm"
+          style={{ animation: "rdk-marquee 34s linear infinite" }}
+        >
+          {[...ecosystem, ...ecosystem, ...ecosystem].map((item, i) => (
+            <span
+              // biome-ignore lint/suspicious/noArrayIndexKey: static repeated marquee
+              key={i}
+              className="flex items-center gap-12"
+            >
+              <span className="text-primary">◆</span>
+              {item}
+            </span>
+          ))}
+        </div>
+      </section>
+
+      {/* Modes */}
+      <section className="mx-auto max-w-6xl px-6 py-28 lg:px-8">
+        <div className="mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <h2 className="font-bold font-display text-4xl tracking-tight sm:text-5xl">
+            Every reality,
+            <br />
+            one API.
+          </h2>
+          <p className="max-w-sm text-muted-foreground">
+            RDK collapses the fragmented AR and VR landscape into a single React
+            abstraction. Same mental model, every surface.
+          </p>
+        </div>
+
+        <div className="border-t">
+          {modes.map(({ n, icon: Icon, title, backend, desc }) => (
+            <div
+              key={title}
+              className="group -mx-4 grid grid-cols-[3rem_1fr] items-start gap-x-5 gap-y-2 rounded-lg border-b px-4 py-7 transition-colors hover:bg-primary/5 md:grid-cols-[4rem_1fr_12rem] md:items-center"
+            >
+              <span className="font-mono text-2xl text-primary/40 transition-colors group-hover:text-primary">
+                {n}
+              </span>
+              <div>
+                <div className="flex items-center gap-3">
+                  <Icon className="size-5 text-primary" />
+                  <h3 className="font-display font-semibold text-2xl">
+                    {title}
+                  </h3>
+                </div>
+                <p className="mt-2 text-muted-foreground">{desc}</p>
+              </div>
+              <span className="col-start-2 font-mono text-muted-foreground text-sm md:col-start-3 md:text-right">
+                {backend}
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Code */}
+      <section className="mx-auto max-w-6xl px-6 pb-28 lg:px-8">
+        <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+          <div>
+            <p className="mb-3 font-mono text-primary text-sm">
+              {"// one shape, every mode"}
+            </p>
+            <h2 className="font-bold font-display text-4xl tracking-tight sm:text-5xl">
+              If you know React,
+              <br />
+              you know RDK.
+            </h2>
+            <p className="mt-5 text-lg text-muted-foreground">
+              Every mode is the same shape: an{" "}
+              <code className="text-foreground">XR</code> session, an anchor,
+              and your own React Three Fiber content inside. Swap the session
+              and you swap realities, markers, GPS, passthrough, or WebXR. The
+              rest is unchanged.
+            </p>
+            <ExternalLink
+              href={app.tutorialUrl}
+              size="lg"
+              className="group mt-8 h-12 gap-2 px-8 font-semibold text-base"
+            >
+              See it in the tutorial
+              <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+            </ExternalLink>
           </div>
 
           <div className="relative">
-            <h2 className="mb-6 font-bold text-4xl text-foreground sm:text-5xl">
-              Ready to build{" "}
-              <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                immersive experiences?
-              </span>
-            </h2>
-            <p className="mx-auto mb-10 max-w-xl text-lg text-muted-foreground">
-              Get started with RDK in minutes. One install, familiar React
-              patterns, infinite possibilities.
-            </p>
+            <div className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-primary/20 to-[#8b5cf6]/20 opacity-60 blur-2xl" />
+            <div className="relative overflow-hidden rounded-2xl border bg-card shadow-xl">
+              <div className="flex items-center gap-2 border-b bg-muted/40 px-4 py-3">
+                <span className="size-3 rounded-full bg-red-400/70" />
+                <span className="size-3 rounded-full bg-yellow-400/70" />
+                <span className="size-3 rounded-full bg-green-400/70" />
+                <span className="ml-2 font-mono text-muted-foreground text-xs">
+                  App.tsx
+                </span>
+              </div>
+              <pre className="overflow-x-auto p-5 font-mono text-[13px] leading-relaxed">
+                <code className="text-foreground">{codeSample}</code>
+              </pre>
+            </div>
+          </div>
+        </div>
+      </section>
 
+      {/* Final CTA */}
+      <section className="relative overflow-hidden border-t">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 50% 80% at 50% 100%, color-mix(in oklch, var(--color-primary) 16%, transparent) 0%, transparent 70%)",
+          }}
+        />
+        <div className="relative mx-auto max-w-3xl px-6 py-32 text-center">
+          <div className="mb-6 font-display text-7xl text-primary/25">
+            {app.icon}
+          </div>
+          <h2 className="font-bold font-display text-4xl tracking-tight sm:text-5xl">
+            Ship your first AR scene today.
+          </h2>
+          <p className="mx-auto mt-5 max-w-lg text-lg text-muted-foreground">
+            Install, drop an anchor, and see it in the real world. Familiar
+            React patterns, no platform-specific rewrites.
+          </p>
+          <div className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <ExternalLink
+              href={app.tutorialUrl}
+              size="lg"
+              className="group h-13 gap-2 px-9 font-semibold text-base"
+            >
+              Start the tutorial
+              <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+            </ExternalLink>
             <ExternalLink
               href={app.docsUrl}
+              variant="outline"
               size="lg"
-              className="group h-14 gap-2 px-10 font-semibold text-lg"
+              className="h-13 gap-2 px-8"
             >
-              Get Started
-              <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
+              Read the docs
             </ExternalLink>
           </div>
         </div>
