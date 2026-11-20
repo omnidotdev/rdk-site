@@ -13,7 +13,9 @@ const Header = () => {
           <InternalLink to="/" variant="unstyled">
             <span className="flex items-center gap-2 font-bold text-xl">
               <span className="text-primary">{app.icon}</span>
-              {app.name}
+              {/* the full name overflows the header on phones */}
+              <span className="sm:hidden">{app.shortName}</span>
+              <span className="hidden sm:inline">{app.name}</span>
             </span>
           </InternalLink>
 
