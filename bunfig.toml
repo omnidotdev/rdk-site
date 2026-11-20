@@ -1,0 +1,5 @@
+[test]
+root = "./src"
+timeout = 30000
+preload = ["./src/test/preload.ts"]
+coverageSkipTestFiles = true
