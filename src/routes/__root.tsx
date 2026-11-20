@@ -22,21 +22,6 @@ import type { QueryClient } from "@tanstack/react-query";
 import type { PropsWithChildren } from "react";
 
 /**
- * Coming soon teaser page for production.
- */
-function ComingSoon() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-sky-900 to-sky-800">
-      <div className="text-center">
-        <h1 className="font-bold text-6xl text-white tracking-tight">
-          {app.name}
-        </h1>
-      </div>
-    </div>
-  );
-}
-
-/**
  * Root route.
  */
 export const Route = createRootRouteWithContext<{
@@ -81,10 +66,6 @@ export const Route = createRootRouteWithContext<{
       {
         rel: "stylesheet",
         href: appCss,
-      },
-      {
-        rel: "manifest",
-        href: "/manifest.json",
       },
       {
         rel: "icon",
@@ -137,26 +118,12 @@ export const Route = createRootRouteWithContext<{
 });
 
 function RootComponent() {
-  // Note: Production teaser is intentionally disabled for this app
-  // To enable, uncomment the isDevEnv check below
-  // if (!isDevEnv) {
-  //   return (
-  //     <RootDocument>
-  //       <ComingSoon />
-  //     </RootDocument>
-  //   );
-  // }
-
   return (
     <RootDocument>
       <Outlet />
     </RootDocument>
   );
 }
-
-// Suppress unused warnings while teaser is disabled
-void isDevEnv;
-void ComingSoon;
 
 /**
  * Evict any previously registered service worker.
@@ -214,19 +181,21 @@ function RootDocument({ children }: PropsWithChildren) {
           <Toaster position="top-center" richColors />
         </ThemeProvider>
 
-        <TanStackDevtools
-          plugins={[
-            {
-              name: "TanStack Router",
-              render: <TanStackRouterDevtoolsPanel />,
-              defaultOpen: true,
-            },
-            {
-              name: "TanStack Query",
-              render: <ReactQueryDevtoolsPanel />,
-            },
-          ]}
-        />
+        {isDevEnv && (
+          <TanStackDevtools
+            plugins={[
+              {
+                name: "TanStack Router",
+                render: <TanStackRouterDevtoolsPanel />,
+                defaultOpen: true,
+              },
+              {
+                name: "TanStack Query",
+                render: <ReactQueryDevtoolsPanel />,
+              },
+            ]}
+          />
+        )}
 
         <Scripts />
       </body>

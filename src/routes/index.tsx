@@ -6,6 +6,7 @@ import {
   Check,
   Copy,
   Glasses,
+  Hand,
   MapPin,
   QrCode,
 } from "lucide-react";
@@ -20,10 +21,7 @@ const HeroScene = lazy(() => import("@/components/landing/HeroScene"));
 
 export const Route = createFileRoute("/")({
   head: () => ({
-    meta: createMetaTags({
-      title: app.name,
-      description: app.description,
-    }),
+    meta: createMetaTags(),
   }),
   component: HomePage,
 });
@@ -82,6 +80,13 @@ const modes = [
     title: "WebXR AR / VR",
     backend: "@react-three/xr",
     desc: "Immersive headset and handset sessions through the WebXR spec.",
+  },
+  {
+    n: "05",
+    icon: Hand,
+    title: "Vision Tracking",
+    backend: "MediaPipe / ONNX",
+    desc: "Track hands, faces, and bodies, and detect objects, straight from the camera feed.",
   },
 ];
 
@@ -152,23 +157,17 @@ function HomePage() {
 
         <div className="relative z-10 mx-auto max-w-6xl px-6 pt-28 pb-24 md:pt-40 md:pb-32 lg:px-8">
           <div className="max-w-3xl">
-            <p className="mb-6 font-mono text-primary text-sm tracking-wide">
-              <span className="mr-1">{app.icon}</span>
-              REALITY DEVELOPMENT KIT
-              <span className="text-muted-foreground"> / web-native XR</span>
-            </p>
-
-            <h1 className="font-display font-extrabold text-5xl leading-[0.98] tracking-tight sm:text-6xl md:text-7xl">
+            <h1 className="font-display font-extrabold text-5xl leading-none tracking-tight sm:text-6xl md:text-7xl">
               The React framework
               <br />
-              <span className="bg-gradient-to-r from-primary to-[#8b5cf6] bg-clip-text pb-2 text-transparent leading-[1.05]">
+              <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text pb-2 text-transparent leading-none">
                 for web XR.
               </span>
             </h1>
 
             <p className="mt-7 max-w-xl text-lg text-muted-foreground">
               One React API over marker AR, geolocation AR, camera passthrough,
-              and WebXR, powered by{" "}
+              WebXR, and vision tracking, powered by{" "}
               <span className="text-foreground">Three.js</span> and{" "}
               <span className="text-foreground">react-three-fiber</span>. Target
               browsers, phones, and headsets from a single codebase.
@@ -281,9 +280,6 @@ function HomePage() {
       <section className="mx-auto max-w-6xl px-6 pb-28 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
           <div>
-            <p className="mb-3 font-mono text-primary text-sm">
-              {"// one shape, every mode"}
-            </p>
             <h2 className="font-bold font-display text-4xl tracking-tight sm:text-5xl">
               If you know React,
               <br />
@@ -293,8 +289,8 @@ function HomePage() {
               Every mode is the same shape: an{" "}
               <code className="text-foreground">XR</code> session, an anchor,
               and your own React Three Fiber content inside. Swap the session
-              and you swap realities, markers, GPS, passthrough, or WebXR. The
-              rest is unchanged.
+              and you swap realities: markers, GPS, passthrough, WebXR, or
+              vision tracking. The rest is unchanged.
             </p>
             <ExternalLink
               href={app.tutorialUrl}
@@ -306,8 +302,8 @@ function HomePage() {
             </ExternalLink>
           </div>
 
-          <div className="relative">
-            <div className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-primary/20 to-[#8b5cf6]/20 opacity-60 blur-2xl" />
+          <div className="relative min-w-0">
+            <div className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-primary/20 to-secondary/20 opacity-60 blur-2xl" />
             <div className="relative overflow-hidden rounded-2xl border bg-card shadow-xl">
               <div className="flex items-center gap-2 border-b bg-muted/40 px-4 py-3">
                 <span className="size-3 rounded-full bg-red-400/70" />
@@ -317,7 +313,7 @@ function HomePage() {
                   App.tsx
                 </span>
               </div>
-              <pre className="overflow-x-auto p-5 font-mono text-[13px] leading-relaxed">
+              <pre className="overflow-x-auto p-5 font-mono text-sm leading-relaxed">
                 <code className="text-foreground">{codeSample}</code>
               </pre>
             </div>

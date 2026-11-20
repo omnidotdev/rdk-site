@@ -1,12 +1,6 @@
 {
   "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": [
-    "src-nextjs-backup",
-    "src/**/*.test.ts",
-    "src/**/*.test.tsx",
-    "src/test",
-    "e2e"
-  ],
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx", "src/test", "e2e"],
   "compilerOptions": {
     "target": "es2022",
     "jsx": "react-jsx",
