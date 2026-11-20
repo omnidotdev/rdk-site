@@ -1,16 +1,12 @@
-import { describe, expect, mock, spyOn, test } from "bun:test";
+import { describe, expect, mock, test } from "bun:test";
 
-import * as TanStackRouter from "@tanstack/react-router";
-import { cleanup, render, screen } from "@testing-library/react";
-
-// Spy on router hooks
-spyOn(TanStackRouter, "useRouteContext").mockReturnValue({});
-spyOn(TanStackRouter, "useRouter").mockReturnValue({
-  invalidate: mock(),
-} as unknown as ReturnType<typeof TanStackRouter.useRouter>);
-spyOn(TanStackRouter, "useLocation").mockReturnValue({
-  pathname: "/",
-} as unknown as ReturnType<typeof TanStackRouter.useLocation>);
+import {
+  RouterProvider,
+  createMemoryHistory,
+  createRootRoute,
+  createRouter,
+} from "@tanstack/react-router";
+import { cleanup, render, screen, waitFor } from "@testing-library/react";
 
 // Mock useTheme
 mock.module("@/providers/ThemeProvider", () => ({
@@ -20,59 +16,39 @@ mock.module("@/providers/ThemeProvider", () => ({
   }),
 }));
 
-// Mock InternalLink to avoid router dependency
-mock.module("@/components/core/InternalLink", () => ({
-  default: ({
-    children,
-    to,
-    ...props
-  }: {
-    children: React.ReactNode;
-    to: string;
-  }) => (
-    <a href={to} {...props}>
-      {children}
-    </a>
-  ),
-}));
-
-// Mock ExternalLink to render a plain anchor
-mock.module("@/components/core/ExternalLink", () => ({
-  default: ({
-    children,
-    href,
-    ...props
-  }: {
-    children: React.ReactNode;
-    href: string;
-  }) => (
-    <a href={href} {...props}>
-      {children}
-    </a>
-  ),
-}));
-
 // Import after mocking
 const { default: Header } = await import("./Header");
 
-const renderHeader = () => {
+/**
+ * Render the header inside a real in-memory router. Test files share one
+ * process, so spying on router hooks or mocking link modules here would leak
+ * into files that run later (e.g. `InternalLink.test.tsx`).
+ */
+const renderHeader = async () => {
   cleanup();
 
-  return render(<Header />);
+  const router = createRouter({
+    routeTree: createRootRoute({ component: Header }),
+    history: createMemoryHistory({ initialEntries: ["/"] }),
+  });
+
+  render(<RouterProvider router={router} />);
+
+  await waitFor(() => {
+    expect(screen.getByRole("banner")).toBeDefined();
+  });
 };
 
 describe("Header", () => {
-  test("renders header element", () => {
-    renderHeader();
+  test("renders header element", async () => {
+    await renderHeader();
 
-    const header = screen.getByRole("banner");
-    expect(header).toBeDefined();
+    expect(screen.getByRole("banner")).toBeDefined();
   });
 
-  test("renders docs link", () => {
-    renderHeader();
+  test("renders docs link", async () => {
+    await renderHeader();
 
-    const docsLink = screen.getByRole("link", { name: "Docs" });
-    expect(docsLink).toBeDefined();
+    expect(screen.getByRole("link", { name: "Docs" })).toBeDefined();
   });
 });
