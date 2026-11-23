@@ -10,7 +10,6 @@ const knipConfig: KnipConfig = {
   ignoreExportsUsedInFile: true,
   ignore: [
     "src/routeTree.gen.ts",
-    "src/components/ui/**",
     "src/lib/config/env.config.ts",
   ],
   ignoreDependencies: ["tailwindcss", "tw-animate-css"],
